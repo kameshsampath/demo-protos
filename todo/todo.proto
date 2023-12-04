@@ -16,23 +16,16 @@ message Task {
 
 service Todo {
   rpc AddTodo (TodoAddRequest) returns (TodoResponse);
-  rpc GetTodo (GetTodoRequest) returns (Task);
-  rpc UpdateTodoStatus (UpdateTodoStatusRequest) returns (Task);
+  rpc UpdateTodo (UpdateTodoStatusRequest) returns (TodoResponse);
   rpc TodoList (google.protobuf.Empty) returns (stream TodoResponse);
 }
 
-message GetTodoRequest {
-  string title = 1;
-}
-
 message UpdateTodoStatusRequest {
-  string title = 1;
-  bool completed = 2;
+  Task task = 1;
 }
 
 message TodoAddRequest {
-  string title = 1;
-  string description = 2;
+  Task task = 1;
 }
 
 message TodoResponse {
