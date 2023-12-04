@@ -16,9 +16,9 @@ message Task {
 
 service Todo {
   rpc AddTodo (TodoAddRequest) returns (TodoResponse);
-  rpc GetTodo (GetTodoRequest) returns (TodoResponse);
-  rpc UpdateTodoStatus (UpdateTodoStatusRequest) returns (TodoResponse);
-  rpc TodoList (google.protobuf.Empty) returns (stream Task);
+  rpc GetTodo (GetTodoRequest) returns (Task);
+  rpc UpdateTodoStatus (UpdateTodoStatusRequest) returns (Task);
+  rpc TodoList (google.protobuf.Empty) returns (stream TodoResponse);
 }
 
 message GetTodoRequest {
@@ -36,5 +36,7 @@ message TodoAddRequest {
 }
 
 message TodoResponse {
-  repeated Task todos = 1;
+  Task task = 1;
+  int32 partition = 2;
+  int64 offset  = 3;
 }

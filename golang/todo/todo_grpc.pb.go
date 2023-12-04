@@ -31,8 +31,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TodoClient interface {
 	AddTodo(ctx context.Context, in *TodoAddRequest, opts ...grpc.CallOption) (*TodoResponse, error)
-	GetTodo(ctx context.Context, in *GetTodoRequest, opts ...grpc.CallOption) (*TodoResponse, error)
-	UpdateTodoStatus(ctx context.Context, in *UpdateTodoStatusRequest, opts ...grpc.CallOption) (*TodoResponse, error)
+	GetTodo(ctx context.Context, in *GetTodoRequest, opts ...grpc.CallOption) (*Task, error)
+	UpdateTodoStatus(ctx context.Context, in *UpdateTodoStatusRequest, opts ...grpc.CallOption) (*Task, error)
 	TodoList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (Todo_TodoListClient, error)
 }
 
@@ -53,8 +53,8 @@ func (c *todoClient) AddTodo(ctx context.Context, in *TodoAddRequest, opts ...gr
 	return out, nil
 }
 
-func (c *todoClient) GetTodo(ctx context.Context, in *GetTodoRequest, opts ...grpc.CallOption) (*TodoResponse, error) {
-	out := new(TodoResponse)
+func (c *todoClient) GetTodo(ctx context.Context, in *GetTodoRequest, opts ...grpc.CallOption) (*Task, error) {
+	out := new(Task)
 	err := c.cc.Invoke(ctx, Todo_GetTodo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,8 +62,8 @@ func (c *todoClient) GetTodo(ctx context.Context, in *GetTodoRequest, opts ...gr
 	return out, nil
 }
 
-func (c *todoClient) UpdateTodoStatus(ctx context.Context, in *UpdateTodoStatusRequest, opts ...grpc.CallOption) (*TodoResponse, error) {
-	out := new(TodoResponse)
+func (c *todoClient) UpdateTodoStatus(ctx context.Context, in *UpdateTodoStatusRequest, opts ...grpc.CallOption) (*Task, error) {
+	out := new(Task)
 	err := c.cc.Invoke(ctx, Todo_UpdateTodoStatus_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func (c *todoClient) TodoList(ctx context.Context, in *emptypb.Empty, opts ...gr
 }
 
 type Todo_TodoListClient interface {
-	Recv() (*Task, error)
+	Recv() (*TodoResponse, error)
 	grpc.ClientStream
 }
 
@@ -95,8 +95,8 @@ type todoTodoListClient struct {
 	grpc.ClientStream
 }
 
-func (x *todoTodoListClient) Recv() (*Task, error) {
-	m := new(Task)
+func (x *todoTodoListClient) Recv() (*TodoResponse, error) {
+	m := new(TodoResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -108,8 +108,8 @@ func (x *todoTodoListClient) Recv() (*Task, error) {
 // for forward compatibility
 type TodoServer interface {
 	AddTodo(context.Context, *TodoAddRequest) (*TodoResponse, error)
-	GetTodo(context.Context, *GetTodoRequest) (*TodoResponse, error)
-	UpdateTodoStatus(context.Context, *UpdateTodoStatusRequest) (*TodoResponse, error)
+	GetTodo(context.Context, *GetTodoRequest) (*Task, error)
+	UpdateTodoStatus(context.Context, *UpdateTodoStatusRequest) (*Task, error)
 	TodoList(*emptypb.Empty, Todo_TodoListServer) error
 	mustEmbedUnimplementedTodoServer()
 }
@@ -121,10 +121,10 @@ type UnimplementedTodoServer struct {
 func (UnimplementedTodoServer) AddTodo(context.Context, *TodoAddRequest) (*TodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddTodo not implemented")
 }
-func (UnimplementedTodoServer) GetTodo(context.Context, *GetTodoRequest) (*TodoResponse, error) {
+func (UnimplementedTodoServer) GetTodo(context.Context, *GetTodoRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTodo not implemented")
 }
-func (UnimplementedTodoServer) UpdateTodoStatus(context.Context, *UpdateTodoStatusRequest) (*TodoResponse, error) {
+func (UnimplementedTodoServer) UpdateTodoStatus(context.Context, *UpdateTodoStatusRequest) (*Task, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTodoStatus not implemented")
 }
 func (UnimplementedTodoServer) TodoList(*emptypb.Empty, Todo_TodoListServer) error {
@@ -206,7 +206,7 @@ func _Todo_TodoList_Handler(srv interface{}, stream grpc.ServerStream) error {
 }
 
 type Todo_TodoListServer interface {
-	Send(*Task) error
+	Send(*TodoResponse) error
 	grpc.ServerStream
 }
 
@@ -214,7 +214,7 @@ type todoTodoListServer struct {
 	grpc.ServerStream
 }
 
-func (x *todoTodoListServer) Send(m *Task) error {
+func (x *todoTodoListServer) Send(m *TodoResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
