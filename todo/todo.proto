@@ -7,14 +7,14 @@ import "google/protobuf/empty.proto";
 
 option go_package="https://github.com/kameshsampath/demo-protos/golang/todo";
 
-message Todo {
+message Task {
 	string title = 1;
 	string description = 2;
 	bool completed = 3;
 	google.protobuf.Timestamp last_updated = 4;
 }
 
-service TodoServer {
+service Todo {
   rpc AddTodo (TodoAddRequest) returns (TodoResponse);
   rpc GetTodo (GetTodoRequest) returns (TodoResponse);
   rpc UpdateTodoStatus (UpdateTodoStatusRequest) returns (TodoResponse);
@@ -36,5 +36,5 @@ message TodoAddRequest {
 }
 
 message TodoResponse {
-  repeated Todo todos = 1;
+  repeated Task todos = 1;
 }

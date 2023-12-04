@@ -20,63 +20,63 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TodoServer_AddTodo_FullMethodName          = "/todo.TodoServer/AddTodo"
-	TodoServer_GetTodo_FullMethodName          = "/todo.TodoServer/GetTodo"
-	TodoServer_UpdateTodoStatus_FullMethodName = "/todo.TodoServer/UpdateTodoStatus"
-	TodoServer_TodoList_FullMethodName         = "/todo.TodoServer/TodoList"
+	Todo_AddTodo_FullMethodName          = "/todo.Todo/AddTodo"
+	Todo_GetTodo_FullMethodName          = "/todo.Todo/GetTodo"
+	Todo_UpdateTodoStatus_FullMethodName = "/todo.Todo/UpdateTodoStatus"
+	Todo_TodoList_FullMethodName         = "/todo.Todo/TodoList"
 )
 
-// TodoServerClient is the client API for TodoServer service.
+// TodoClient is the client API for Todo service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type TodoServerClient interface {
+type TodoClient interface {
 	AddTodo(ctx context.Context, in *TodoAddRequest, opts ...grpc.CallOption) (*TodoResponse, error)
 	GetTodo(ctx context.Context, in *GetTodoRequest, opts ...grpc.CallOption) (*TodoResponse, error)
 	UpdateTodoStatus(ctx context.Context, in *UpdateTodoStatusRequest, opts ...grpc.CallOption) (*TodoResponse, error)
-	TodoList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (TodoServer_TodoListClient, error)
+	TodoList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (Todo_TodoListClient, error)
 }
 
-type todoServerClient struct {
+type todoClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTodoServerClient(cc grpc.ClientConnInterface) TodoServerClient {
-	return &todoServerClient{cc}
+func NewTodoClient(cc grpc.ClientConnInterface) TodoClient {
+	return &todoClient{cc}
 }
 
-func (c *todoServerClient) AddTodo(ctx context.Context, in *TodoAddRequest, opts ...grpc.CallOption) (*TodoResponse, error) {
+func (c *todoClient) AddTodo(ctx context.Context, in *TodoAddRequest, opts ...grpc.CallOption) (*TodoResponse, error) {
 	out := new(TodoResponse)
-	err := c.cc.Invoke(ctx, TodoServer_AddTodo_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Todo_AddTodo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *todoServerClient) GetTodo(ctx context.Context, in *GetTodoRequest, opts ...grpc.CallOption) (*TodoResponse, error) {
+func (c *todoClient) GetTodo(ctx context.Context, in *GetTodoRequest, opts ...grpc.CallOption) (*TodoResponse, error) {
 	out := new(TodoResponse)
-	err := c.cc.Invoke(ctx, TodoServer_GetTodo_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Todo_GetTodo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *todoServerClient) UpdateTodoStatus(ctx context.Context, in *UpdateTodoStatusRequest, opts ...grpc.CallOption) (*TodoResponse, error) {
+func (c *todoClient) UpdateTodoStatus(ctx context.Context, in *UpdateTodoStatusRequest, opts ...grpc.CallOption) (*TodoResponse, error) {
 	out := new(TodoResponse)
-	err := c.cc.Invoke(ctx, TodoServer_UpdateTodoStatus_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Todo_UpdateTodoStatus_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *todoServerClient) TodoList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (TodoServer_TodoListClient, error) {
-	stream, err := c.cc.NewStream(ctx, &TodoServer_ServiceDesc.Streams[0], TodoServer_TodoList_FullMethodName, opts...)
+func (c *todoClient) TodoList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (Todo_TodoListClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Todo_ServiceDesc.Streams[0], Todo_TodoList_FullMethodName, opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &todoServerTodoListClient{stream}
+	x := &todoTodoListClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -86,16 +86,16 @@ func (c *todoServerClient) TodoList(ctx context.Context, in *emptypb.Empty, opts
 	return x, nil
 }
 
-type TodoServer_TodoListClient interface {
+type Todo_TodoListClient interface {
 	Recv() (*TodoResponse, error)
 	grpc.ClientStream
 }
 
-type todoServerTodoListClient struct {
+type todoTodoListClient struct {
 	grpc.ClientStream
 }
 
-func (x *todoServerTodoListClient) Recv() (*TodoResponse, error) {
+func (x *todoTodoListClient) Recv() (*TodoResponse, error) {
 	m := new(TodoResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -103,145 +103,145 @@ func (x *todoServerTodoListClient) Recv() (*TodoResponse, error) {
 	return m, nil
 }
 
-// TodoServerServer is the server API for TodoServer service.
-// All implementations must embed UnimplementedTodoServerServer
+// TodoServer is the server API for Todo service.
+// All implementations must embed UnimplementedTodoServer
 // for forward compatibility
-type TodoServerServer interface {
+type TodoServer interface {
 	AddTodo(context.Context, *TodoAddRequest) (*TodoResponse, error)
 	GetTodo(context.Context, *GetTodoRequest) (*TodoResponse, error)
 	UpdateTodoStatus(context.Context, *UpdateTodoStatusRequest) (*TodoResponse, error)
-	TodoList(*emptypb.Empty, TodoServer_TodoListServer) error
-	mustEmbedUnimplementedTodoServerServer()
+	TodoList(*emptypb.Empty, Todo_TodoListServer) error
+	mustEmbedUnimplementedTodoServer()
 }
 
-// UnimplementedTodoServerServer must be embedded to have forward compatible implementations.
-type UnimplementedTodoServerServer struct {
+// UnimplementedTodoServer must be embedded to have forward compatible implementations.
+type UnimplementedTodoServer struct {
 }
 
-func (UnimplementedTodoServerServer) AddTodo(context.Context, *TodoAddRequest) (*TodoResponse, error) {
+func (UnimplementedTodoServer) AddTodo(context.Context, *TodoAddRequest) (*TodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddTodo not implemented")
 }
-func (UnimplementedTodoServerServer) GetTodo(context.Context, *GetTodoRequest) (*TodoResponse, error) {
+func (UnimplementedTodoServer) GetTodo(context.Context, *GetTodoRequest) (*TodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTodo not implemented")
 }
-func (UnimplementedTodoServerServer) UpdateTodoStatus(context.Context, *UpdateTodoStatusRequest) (*TodoResponse, error) {
+func (UnimplementedTodoServer) UpdateTodoStatus(context.Context, *UpdateTodoStatusRequest) (*TodoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTodoStatus not implemented")
 }
-func (UnimplementedTodoServerServer) TodoList(*emptypb.Empty, TodoServer_TodoListServer) error {
+func (UnimplementedTodoServer) TodoList(*emptypb.Empty, Todo_TodoListServer) error {
 	return status.Errorf(codes.Unimplemented, "method TodoList not implemented")
 }
-func (UnimplementedTodoServerServer) mustEmbedUnimplementedTodoServerServer() {}
+func (UnimplementedTodoServer) mustEmbedUnimplementedTodoServer() {}
 
-// UnsafeTodoServerServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TodoServerServer will
+// UnsafeTodoServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TodoServer will
 // result in compilation errors.
-type UnsafeTodoServerServer interface {
-	mustEmbedUnimplementedTodoServerServer()
+type UnsafeTodoServer interface {
+	mustEmbedUnimplementedTodoServer()
 }
 
-func RegisterTodoServerServer(s grpc.ServiceRegistrar, srv TodoServerServer) {
-	s.RegisterService(&TodoServer_ServiceDesc, srv)
+func RegisterTodoServer(s grpc.ServiceRegistrar, srv TodoServer) {
+	s.RegisterService(&Todo_ServiceDesc, srv)
 }
 
-func _TodoServer_AddTodo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Todo_AddTodo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TodoAddRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TodoServerServer).AddTodo(ctx, in)
+		return srv.(TodoServer).AddTodo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TodoServer_AddTodo_FullMethodName,
+		FullMethod: Todo_AddTodo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodoServerServer).AddTodo(ctx, req.(*TodoAddRequest))
+		return srv.(TodoServer).AddTodo(ctx, req.(*TodoAddRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TodoServer_GetTodo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Todo_GetTodo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetTodoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TodoServerServer).GetTodo(ctx, in)
+		return srv.(TodoServer).GetTodo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TodoServer_GetTodo_FullMethodName,
+		FullMethod: Todo_GetTodo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodoServerServer).GetTodo(ctx, req.(*GetTodoRequest))
+		return srv.(TodoServer).GetTodo(ctx, req.(*GetTodoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TodoServer_UpdateTodoStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Todo_UpdateTodoStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateTodoStatusRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TodoServerServer).UpdateTodoStatus(ctx, in)
+		return srv.(TodoServer).UpdateTodoStatus(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TodoServer_UpdateTodoStatus_FullMethodName,
+		FullMethod: Todo_UpdateTodoStatus_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodoServerServer).UpdateTodoStatus(ctx, req.(*UpdateTodoStatusRequest))
+		return srv.(TodoServer).UpdateTodoStatus(ctx, req.(*UpdateTodoStatusRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TodoServer_TodoList_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Todo_TodoList_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(emptypb.Empty)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(TodoServerServer).TodoList(m, &todoServerTodoListServer{stream})
+	return srv.(TodoServer).TodoList(m, &todoTodoListServer{stream})
 }
 
-type TodoServer_TodoListServer interface {
+type Todo_TodoListServer interface {
 	Send(*TodoResponse) error
 	grpc.ServerStream
 }
 
-type todoServerTodoListServer struct {
+type todoTodoListServer struct {
 	grpc.ServerStream
 }
 
-func (x *todoServerTodoListServer) Send(m *TodoResponse) error {
+func (x *todoTodoListServer) Send(m *TodoResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-// TodoServer_ServiceDesc is the grpc.ServiceDesc for TodoServer service.
+// Todo_ServiceDesc is the grpc.ServiceDesc for Todo service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var TodoServer_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "todo.TodoServer",
-	HandlerType: (*TodoServerServer)(nil),
+var Todo_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "todo.Todo",
+	HandlerType: (*TodoServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddTodo",
-			Handler:    _TodoServer_AddTodo_Handler,
+			Handler:    _Todo_AddTodo_Handler,
 		},
 		{
 			MethodName: "GetTodo",
-			Handler:    _TodoServer_GetTodo_Handler,
+			Handler:    _Todo_GetTodo_Handler,
 		},
 		{
 			MethodName: "UpdateTodoStatus",
-			Handler:    _TodoServer_UpdateTodoStatus_Handler,
+			Handler:    _Todo_UpdateTodoStatus_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "TodoList",
-			Handler:       _TodoServer_TodoList_Handler,
+			Handler:       _Todo_TodoList_Handler,
 			ServerStreams: true,
 		},
 	},
