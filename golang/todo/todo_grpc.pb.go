@@ -87,7 +87,7 @@ func (c *todoClient) TodoList(ctx context.Context, in *emptypb.Empty, opts ...gr
 }
 
 type Todo_TodoListClient interface {
-	Recv() (*TodoResponse, error)
+	Recv() (*Task, error)
 	grpc.ClientStream
 }
 
@@ -95,8 +95,8 @@ type todoTodoListClient struct {
 	grpc.ClientStream
 }
 
-func (x *todoTodoListClient) Recv() (*TodoResponse, error) {
-	m := new(TodoResponse)
+func (x *todoTodoListClient) Recv() (*Task, error) {
+	m := new(Task)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -206,7 +206,7 @@ func _Todo_TodoList_Handler(srv interface{}, stream grpc.ServerStream) error {
 }
 
 type Todo_TodoListServer interface {
-	Send(*TodoResponse) error
+	Send(*Task) error
 	grpc.ServerStream
 }
 
@@ -214,7 +214,7 @@ type todoTodoListServer struct {
 	grpc.ServerStream
 }
 
-func (x *todoTodoListServer) Send(m *TodoResponse) error {
+func (x *todoTodoListServer) Send(m *Task) error {
 	return x.ServerStream.SendMsg(m)
 }
 

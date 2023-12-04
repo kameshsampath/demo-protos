@@ -18,7 +18,7 @@ service Todo {
   rpc AddTodo (TodoAddRequest) returns (TodoResponse);
   rpc GetTodo (GetTodoRequest) returns (TodoResponse);
   rpc UpdateTodoStatus (UpdateTodoStatusRequest) returns (TodoResponse);
-  rpc TodoList (google.protobuf.Empty) returns (stream TodoResponse);
+  rpc TodoList (google.protobuf.Empty) returns (stream Task);
 }
 
 message GetTodoRequest {
