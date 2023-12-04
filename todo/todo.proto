@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package todo;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package="https://github.com/kameshsampath/demo-protos/golang/todo";
+
+message Todo {
+	string title = 1;
+	string description = 2;
+	bool completed = 3;
+	google.protobuf.Timestamp last_updated = 4;
+}
+
+service TodoServer {
+  rpc AddTodo (TodoAddRequest) returns (TodoResponse);
+  rpc GetTodo (GetTodoRequest) returns (TodoResponse);
+  rpc UpdateTodoStatus (UpdateTodoStatusRequest) returns (TodoResponse);
+  rpc TodoList (google.protobuf.Empty) returns (stream TodoResponse);
+}
+
+message GetTodoRequest {
+  string title = 1;
+}
+
+message UpdateTodoStatusRequest {
+  string title = 1;
+  bool completed = 2;
+}
+
+message TodoAddRequest {
+  string title = 1;
+  string description = 2;
+}
+
+message TodoResponse {
+  repeated Todo todos = 1;
+}
