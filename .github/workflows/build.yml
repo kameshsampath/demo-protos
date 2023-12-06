@@ -38,13 +38,13 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "BUILD_TS=date::$(date +'%Y-%m-%d-%T')" >> "$GITHUB_OUTPUT"
 
       - name: Commit and Push
         run: |
           git config --global user.name '${{github.actor}}'
           git config --global user.email '${{github.actor}}@users.noreply.github.com'
-          git commit -am "(ci):Build ${{ steps.date.outputs.date }}"
+          git commit -am "(ci):Build ${{ steps.date.outputs.BUILD_TS }}"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
