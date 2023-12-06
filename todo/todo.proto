@@ -30,14 +30,18 @@ message TodoResponse {
 }
 
 message Error {
-  repeated string topic = 1;
-  repeated int32 partition = 2;
-  repeated string message  = 3;
+  string topic = 1;
+  int32 partition = 2;
+  string message  = 3;
+}
+
+message Errors {
+  repeated Error error = 1;
 }
 
 message TodoListResponse {
   oneof response {
-    Task task = 1;
-    Error errors = 2;
+    TodoResponse todo = 1;
+    Errors errors = 2;
   };
 }
