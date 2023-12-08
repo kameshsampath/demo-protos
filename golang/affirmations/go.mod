@@ -1,4 +1,4 @@
-module github.com/kameshsampath/demo-protos/golang/todo
+module github.com/kameshsampath/demo-protos/golang/affirmations
 
 go 1.21.2
 
