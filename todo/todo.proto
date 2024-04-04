@@ -10,8 +10,9 @@ option go_package="https://github.com/kameshsampath/demo-protos/golang/todo";
 message Task {
 	string title = 1;
 	string description = 2;
-	bool completed = 3;
-	google.protobuf.Timestamp last_updated = 4;
+  string category = 3;
+	bool completed = 4;
+	google.protobuf.Timestamp last_updated = 10;
 }
 
 service Todo {
