@@ -11,7 +11,7 @@ message Task {
 	string title = 1;
 	string description = 2;
   string category = 3;
-	bool completed = 4;
+	bool status = 4;
 	google.protobuf.Timestamp last_updated = 10;
 }
 
